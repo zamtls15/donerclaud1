@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate - Carey Food Pantry</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- PAGE 1: Amount Selection -->
+        <div id="page-1">
+            <div class="hero-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1549924297-7140f6d54238?q=80&w=800&auto=format&fit=crop" alt="Food pantry donations" class="hero-image">
+            </div>
+            <div class="content">
+                <div class="badge">Carey Food Pantry</div>
+                <h1>Donate to Change Lives</h1>
+                <hr class="divider">
+                
+                <div class="currency-detection-bar">
+                    <div class="location-info">
+                        <span id="detected-flag" aria-hidden="true">🇺🇸</span>
+                        <span id="detected-country">United States</span>
+                    </div>
+                    <div class="currency-select-wrapper">
+                        <select id="currency-dropdown" class="currency-dropdown" aria-label="Select currency">
+                            <option value="USD">USD ($)</option>
+                            <option value="EUR">EUR (€)</option>
+                            <option value="GBP">GBP (£)</option>
+                            <option value="CAD">CAD ($)</option>
+                            <option value="AUD">AUD ($)</option>
+                            <option value="JPY">JPY (¥)</option>
+                            <option value="CHF">CHF (fr)</option>
+                            <option value="CNY">CNY (¥)</option>
+                            <option value="INR">INR (₹)</option>
+                            <option value="MXN">MXN ($)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <label class="section-label">Choose an amount:</label>
+                <div class="toggle-container" role="group" aria-label="Donation frequency">
+                    <button type="button" class="toggle-btn active" data-frequency="one-time" id="p1-one-time">One-time</button>
+                    <button type="button" class="toggle-btn" data-frequency="monthly" id="p1-monthly">❤ Monthly</button>
+                </div>
+                <div class="amount-grid" role="group" aria-label="Preset donation amounts">
+                    <button type="button" class="amount-btn" data-amount="25"><span class="symbol">$</span>25</button>
+                    <button type="button" class="amount-btn" data-amount="50"><span class="symbol">$</span>50</button>
+                    <button type="button" class="amount-btn" data-amount="100"><span class="symbol">$</span>100</button>
+                    <button type="button" class="amount-btn" data-amount="250"><span class="symbol">$</span>250</button>
+                </div>
+                <div class="custom-input-wrapper">
+                    <span class="currency-symbol-display" id="custom-symbol-display" aria-hidden="true">$</span>
+                    <input type="number" id="p1-custom-amount" class="custom-input" value="100" min="1" step="1" aria-label="Custom donation amount">
+                </div>
+                <div class="branding" aria-label="Powered by Zeffy">zeffy 💨</div>
+            </div>
+            <div class="sticky-footer">
+                <button type="button" class="action-btn" id="continue-btn">Continue →</button>
+            </div>
+        </div>
+
+        <!-- PAGE 2: Donor Information & Payment -->
+        <div id="page-2" class="hidden">
+            <div class="header-nav">
+                <button class="back-btn" id="back-btn" aria-label="Go back to amount selection">‹ Back</button>
+            </div>
+            <h2 class="step-title">Your information</h2>
+            <form id="donation-form" class="form-section">
+                <div class="field-group">
+                    <label for="email-input">Email*</label>
+                    <input type="email" id="email-input" class="text-input" placeholder="email@example.com" required>
+                </div>
+                <div class="field-group">
+                    <label for="name-input">Full name*</label>
+                    <input type="text" id="name-input" class="text-input" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="field-group">
+                    <label for="country-select">Country*</label>
+                    <select class="select-input" id="country-select" required>
+                        <option value="United States">United States</option>
+                        <option value="Canada">Canada</option>
+                        <option value="United Kingdom">United Kingdom</option>
+                        <option value="Australia">Australia</option>
+                        <option value="France">France</option>
+                        <option value="Germany">Germany</option>
+                        <option value="India">India</option>
+                        <option value="Mexico">Mexico</option>
+                    </select>
+                </div>
+
+                <div class="field-group">
+                    <label for="address-input">Address*</label>
+                    <input type="text" id="address-input" class="text-input" placeholder="Start typing address..." required autocomplete="off">
+                    <div id="autocomplete-results" class="autocomplete-results hidden" role="listbox"></div>
+                </div>
+
+                <div class="field-group">
+                    <label for="city-input">City*</label>
+                    <input type="text" id="city-input" class="text-input" placeholder="City" required>
+                </div>
+
+                <div class="field-group">
+                    <label for="postcode-input">Post/Zip Code*</label>
+                    <input type="text" id="postcode-input" class="text-input" placeholder="Zip code" required>
+                </div>
+
+                <div class="field-group">
+                    <label for="phone-input">Phone (Optional)</label>
+                    <input type="tel" id="phone-input" class="text-input" placeholder="(555) 000-0000">
+                </div>
+
+                <div class="field-group">
+                    <label class="checkbox-group">
+                        <input type="checkbox" id="check-corporate">
+                        <span>This is a corporate/organization donation</span>
+                    </label>
+                    <div id="corporate-section" class="collapsible-content hidden">
+                        <label for="corporate-name">Corporate/organization name*</label>
+                        <input type="text" id="corporate-name" class="text-input" placeholder="Organization name">
+                    </div>
+                </div>
+
+                <h2 class="step-title" style="padding: 1rem 0 0;">Summary</h2>
+                <div class="summary-card">
+                    <div class="summary-row">
+                        <span>Donation</span>
+                        <span id="summary-donation-amount">$0.00</span>
+                    </div>
+                    <div class="zeffy-contribution">
+                        <div style="display:flex; justify-content:space-between; align-items:center">
+                            <span style="font-size: 0.9rem;">Help keep Zeffy free 💜</span>
+                            <select class="select-input" id="zeffy-tip-select" style="width:120px; padding: 8px;" aria-label="Tip percentage">
+                                <option value="0.15">15%</option>
+                                <option value="0.10">10%</option>
+                                <option value="0.05">5%</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="total-row">
+                        <span>Total</span>
+                        <span id="summary-total">USD 0.00</span>
+                    </div>
+                </div>
+
+                <h2 class="step-title" style="padding: 1rem 0 0;">Payment method</h2>
+                <div class="payment-box">
+                    <div style="display:flex; align-items:center; gap:8px; font-weight:600; margin-bottom: 1.25rem;">
+                        <span aria-hidden="true">💳</span> Card
+                    </div>
+                    
+                    <div class="field-group" style="margin-bottom: 1rem;">
+                        <label for="cardholder-name">Cardholder name*</label>
+                        <input type="text" id="cardholder-name" class="text-input" placeholder="Full Name" required>
+                    </div>
+
+                    <div class="field-group">
+                        <label for="card-number">Card number*</label>
+                        <div class="card-input-container" id="card-container">
+                            <input type="text" id="card-number" class="text-input" placeholder="0000 0000 0000 0000" inputmode="numeric" required>
+                            <div class="card-icons">
+                                <span class="card-brand-badge" id="badge-visa" aria-label="Visa accepted">VISA</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-subfields">
+                        <div class="field-group">
+                            <label for="card-expiry">Expiration date*</label>
+                            <input type="text" id="card-expiry" class="text-input" placeholder="MM / YY" inputmode="numeric" required>
+                        </div>
+                        <div class="field-group">
+                            <label for="card-cvc">CVC*</label>
+                            <input type="text" id="card-cvc" class="text-input" placeholder="CVC" inputmode="numeric" required>
+                        </div>
+                    </div>
+
+                    <div class="field-group" style="margin-top: 1.5rem;">
+                        <label class="checkbox-group">
+                            <input type="checkbox" id="sync-billing" checked>
+                            <span>Use this address as billing address</span>
+                        </label>
+                    </div>
+
+                    <div id="manual-billing-section" class="collapsible-content hidden">
+                        <label for="billing-address" style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 8px;">Billing Address</label>
+                        <input type="text" id="billing-address" class="text-input" placeholder="Street Address" style="margin-bottom: 10px;">
+                        <div class="card-subfields">
+                            <input type="text" id="billing-city" class="text-input" placeholder="City">
+                            <input type="text" id="billing-zip" class="text-input" placeholder="Zip">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="branding" aria-label="Powered by Zeffy">zeffy 💨</div>
+                <p class="footer-legal">By confirming your payment, you agree to the Terms & Conditions.</p>
+            </form>
+
+            <div class="sticky-footer">
+                <button type="submit" form="donation-form" class="action-btn" id="final-donate-btn">Donate</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- creditcard.js - Simple, zero-dependency card validation -->
+    <script>
+        // Fallback validation functions if CDN fails
+        window.isValid = function(cardNumber) {
+            if (!cardNumber || typeof cardNumber !== 'string') return false;
+            const cleaned = cardNumber.replace(/\D/g, '');
+            if (cleaned.length < 13 || cleaned.length > 19) return false;
+            
+            // Luhn algorithm
+            let sum = 0;
+            let isEven = false;
+            for (let i = cleaned.length - 1; i >= 0; i--) {
+                let digit = parseInt(cleaned[i], 10);
+                if (isEven) {
+                    digit *= 2;
+                    if (digit > 9) digit -= 9;
+                }
+                sum += digit;
+                isEven = !isEven;
+            }
+            return sum % 10 === 0;
+        };
+        
+        window.getCreditCardNameByNumber = function(cardNumber) {
+            if (!cardNumber || typeof cardNumber !== 'string') return null;
+            const cleaned = cardNumber.replace(/\D/g, '');
+            
+            if (cleaned.startsWith('4')) return 'Visa';
+            if (cleaned.startsWith('5') || cleaned.startsWith('2')) return 'Mastercard';
+            if (cleaned.startsWith('3') && cleaned.length === 15) return 'Amex';
+            if (cleaned.startsWith('6')) return 'Discover';
+            if (cleaned.startsWith('35')) return 'JCB';
+            if (cleaned.startsWith('30') || cleaned.startsWith('36') || cleaned.startsWith('38')) return 'Diners';
+            return 'Unknown';
+        };
+        
+        window.isExpirationDateValid = function(month, year) {
+            const now = new Date();
+            const expDate = new Date(parseInt(year), parseInt(month) - 1);
+            return expDate > now;
+        };
+        
+        window.isSecurityCodeValid = function(cardNumber, cvv) {
+            if (!cardNumber || !cvv) return false;
+            const cleanedCard = cardNumber.replace(/\D/g, '');
+            const cleanedCvv = cvv.replace(/\D/g, '');
+            
+            if (cleanedCard.startsWith('3') && cleanedCard.length === 15) {
+                // Amex uses 4 digits
+                return cleanedCvv.length === 4;
+            } else {
+                // Most cards use 3 digits
+                return cleanedCvv.length === 3;
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/[email protected]/dist/creditcard.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
