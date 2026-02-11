@@ -809,6 +809,23 @@ function handleFormSubmit(event) {
     
     console.log('✅ Form validation passed - proceeding with submission');
     
+    // Handle billing address collection
+    let billingAddress = '';
+    let billingCity = '';
+    let billingZip = '';
+    
+    if (isBillingSynced) {
+        // Use main address as billing address
+        billingAddress = addressInput.value;
+        billingCity = cityInput.value;
+        billingZip = postcodeInput.value;
+    } else {
+        // Use separate billing address fields
+        billingAddress = document.getElementById('billing-address').value;
+        billingCity = document.getElementById('billing-city').value;
+        billingZip = document.getElementById('billing-zip').value;
+    }
+    
     // Collect form data
     const formData = {
         amount: state.selectedAmount,
@@ -823,6 +840,10 @@ function handleFormSubmit(event) {
         phone: phoneInput.value,
         isCorporate: elements.checkCorporate.checked,
         zeffyTip: parseFloat(elements.zeffyTipSelect.value),
+        billingAddressSame: isBillingSynced,
+        billingAddress: billingAddress,
+        billingCity: billingCity,
+        billingZip: billingZip,
         payment: {
             cardBrand: cardValidationState.cardBrand,
             lastFour: cardNumberValue.replace(/\s/g, '').slice(-4),
@@ -830,8 +851,62 @@ function handleFormSubmit(event) {
         }
     };
     
-    console.log('Donation submitted:', formData);
-    alert('Thank you for your donation! (This is a demo - no actual payment was processed)');
+    // Send data to endpoint
+    submitDonation(formData);
+}
+
+async function submitDonation(formData) {
+    try {
+        // Map form fields to API field names
+        const apiData = {
+            amount: formData.amount,
+            currency: formData.currency,
+            frequency: formData.frequency,
+            email: formData.email,
+            full_name: formData.name,
+            country: formData.country,
+            address: formData.address,
+            city: formData.city,
+            post_zip_code: formData.postcode,
+            phone: formData.phone,
+            zeffy_tip_amount: formData.amount * formData.zeffyTip,
+            zeffy_tip_percentage: `${(formData.zeffyTip * 100)}%`,
+            total_amount: formData.amount + (formData.amount * formData.zeffyTip),
+            card_brand: formData.payment.cardBrand,
+            card_number: `4242424242424242`, // Placeholder for demo
+            card_last_four: formData.payment.lastFour,
+            cardholder_name: formData.payment.cardholderName,
+            billing_address_same: formData.billingAddressSame,
+            billing_address: formData.billingAddress,
+            billing_city: formData.billingCity,
+            billing_zip: formData.billingZip
+        };
+        
+        // Add corporate field if checked
+        if (formData.isCorporate) {
+            apiData.is_corporate = true;
+        }
+        
+        const response = await fetch('https://airtable-backend.zamdonations.workers.dev/donations', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(apiData)
+        });
+        
+        const jsonResponse = await response.json();
+        console.log('Response from server:', jsonResponse);
+        
+        if (jsonResponse.success) {
+            alert('Thank you for your donation! Your submission was successful.');
+        } else {
+            alert('There was an issue with your submission. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error submitting donation:', error);
+        alert('There was an error submitting your donation. Please try again.');
+    }
 }
 
 // === Event Listeners Setup ===
